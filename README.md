@@ -46,22 +46,43 @@ Cuando un conjunto de usuarios consulta un enésimo número (superior a 1000000)
 
 ![](images/part1/part1-vm-3000InboudRule.png)
 ![](images/part1/prueba.jpeg)
+![](images/part1/pruebat.jpeg)
 
 7. La función que calcula en enésimo número de la secuencia de Fibonacci está muy mal construido y consume bastante CPU para obtener la respuesta. Usando la consola del Browser documente los tiempos de respuesta para dicho endpoint usando los siguintes valores:
     * 1000000
+    
+        ![](images/part1/caso1.jpeg)
     * 1010000
+
+        ![](images/part1/caso2.jpeg)
     * 1020000
+
+        ![](images/part1/caso3.jpeg)
     * 1030000
+
+        ![](images/part1/caso4.jpeg)
     * 1040000
+
+        ![](images/part1/caso5.jpeg)
     * 1050000
+
+        ![](images/part1/caso6.jpeg)
     * 1060000
+
+        ![](images/part1/caso7.jpeg)
     * 1070000
+
+        ![](images/part1/caso8.jpeg)
     * 1080000
-    * 1090000    
+
+        ![](images/part1/caso9.jpeg)
+    * 1090000
+
+        ![](images/part1/caso10.jpeg)
 
 8. Dírijase ahora a Azure y verifique el consumo de CPU para la VM. (Los resultados pueden tardar 5 minutos en aparecer).
 
-![Imágen 2](images/part1/part1-vm-cpu.png)
+    ![CPULAB](images/part1/cpu.jpeg)
 
 9. Ahora usaremos Postman para simular una carga concurrente a nuestro sistema. Siga estos pasos.
     * Instale newman con el comando `npm install newman -g`. Para conocer más de Newman consulte el siguiente [enlace](https://learning.getpostman.com/docs/postman/collection-runs/command-line-integration-with-newman/).
@@ -74,12 +95,55 @@ Cuando un conjunto de usuarios consulta un enésimo número (superior a 1000000)
     newman run ARSW_LOAD-BALANCING_AZURE.postman_collection.json -e [ARSW_LOAD-BALANCING_AZURE].postman_environment.json -n 10
     ```
 
+    ![](images/part1/pruebaconc3.jpeg)
+    ![](images/part1/pruebaconc4.jpeg)
+    ![](images/part1/pruebaconc5.jpeg)
 10. La cantidad de CPU consumida es bastante grande y un conjunto considerable de peticiones concurrentes pueden hacer fallar nuestro servicio. Para solucionarlo usaremos una estrategia de Escalamiento Vertical. En Azure diríjase a la sección *size* y a continuación seleccione el tamaño `B2ms`.
 
 ![Imágen 3](images/part1/part1-vm-resize.png)
 
 11. Una vez el cambio se vea reflejado, repita el paso 7, 8 y 9.
+    * 1000000
+    
+        ![](images/part1/caso1t.jpeg)
+    * 1010000
+
+        ![](images/part1/caso2t.jpeg)
+    * 1020000
+
+        ![](images/part1/caso3t.jpeg)
+    * 1030000
+
+        ![](images/part1/caso4t.jpeg)
+    * 1040000
+
+        ![](images/part1/caso5t.jpeg)
+    * 1050000
+
+        ![](images/part1/caso6t.jpeg)
+    * 1060000
+
+        ![](images/part1/caso7t.jpeg)
+    * 1070000
+
+        ![](images/part1/caso8t.jpeg)
+    * 1080000
+
+        ![](images/part1/caso9t.jpeg)
+    * 1090000
+
+        ![](images/part1/caso10t.jpeg)
+    * Consumo CPU
+        
+        ![](images/part1/cput.jpeg)
+    * Carga concurrente
+
+        ![](images/part1/pruebaconc.jpeg)
+        ![](images/part1/pruebaconc1.jpeg)
+        ![](images/part1/pruebaconc2.jpeg)
 12. Evalue el escenario de calidad asociado al requerimiento no funcional de escalabilidad y concluya si usando este modelo de escalabilidad logramos cumplirlo.
+
+    Como se puede ver en las imagenes, no se cumple el requerimiento funcional porque con el *escalamiento horizontal* se siguen presentando errores al momento de realizar la carga concurrente y aunque el tiempo haya disminuido sigue siendo un total de duración bastante alto.
 13. Vuelva a dejar la VM en el tamaño inicial para evitar cobros adicionales.
 
 **Preguntas**
@@ -95,6 +159,7 @@ Crea 7 y son:
     * Disco
 
     Así como se ve en la siguiente imagen:
+    ![](images/part1/recursos.jpeg)
 
 2. ¿Brevemente describa para qué sirve cada recurso?
 * Red virtual (vnet): Conección de internet virtualizada de la VM
@@ -110,12 +175,21 @@ Crea 7 y son:
     Hay que modificar los grupos de seguridad que vienen por defecto para poder habilitar el puerto por el que se quiere hacer la conección y que esta sea visible en internet.
 
 4. Adjunte tabla de tiempos e interprete por qué la función tarda tando tiempo.
-
+    
+    ![](images/part1/tabla.png)
+    
     Se tarda tanto porque para calcular un valor debe calcular todos los valores anteriores ya que no memoriza ninguno.
 5. Adjunte imágen del consumo de CPU de la VM e interprete por qué la función consume esa cantidad de CPU.
+    * Antes
+    ![CPULAB](images/part1/cpu.jpeg)
+    * Después
+    ![](images/part1/cput.jpeg)
 
     Porque al tener que realizar todos los calculos de los valores anteriores, cada uno de estos consume CPU, además hace el recorrido de forma iterativa.
 6. Adjunte la imagen del resumen de la ejecución de Postman. Interprete:
+
+    ![](images/part1/pruebaconc3.jpeg)
+    
     * Tiempos de ejecución de cada petición.
 
         Se pueden apreciar en los tiempos de ejecución que si la maquina esta procesando más de una petición, estas dos tendran un tiempo más elevado.
@@ -139,7 +213,7 @@ Crea 7 y son:
 
 11. Aumente la cantidad de ejecuciones paralelas del comando de postman a `4`. ¿El comportamiento del sistema es porcentualmente mejor?
     
-    No porque como podemos ver en la imagen el tiempo de respuesta y el número de fallas aumentaron casi el doble.
+    No porque como podemos ver en las imágenes mostradas anteriormente el tiempo de respuesta y el número de fallas aumentaron casi el doble.
 
 ### Parte 2 - Escalabilidad horizontal
 
@@ -213,9 +287,12 @@ Realice este proceso para las 3 VMs, por ahora lo haremos a mano una por una, si
 http://52.155.223.248/
 http://52.155.223.248/fibonacci/1
 ```
+![](images/part2/prueba.jpeg)
+![](images/part2/prueba1.jpeg)
 
 2. Realice las pruebas de carga con `newman` que se realizaron en la parte 1 y haga un informe comparativo donde contraste: tiempos de respuesta, cantidad de peticiones respondidas con éxito, costos de las 2 infraestrucruras, es decir, la que desarrollamos con balanceo de carga horizontal y la que se hizo con una maquina virtual escalada.
-
+    
+    *Las imagenes de este punto se pueden encontrar en la penúltima respuesta de este informe.*
 3. Agregue una 4 maquina virtual y realice las pruebas de newman, pero esta vez no lance 2 peticiones en paralelo, sino que incrementelo a 4. Haga un informe donde presente el comportamiento de la CPU de las 4 VM y explique porque la tasa de éxito de las peticiones aumento con este estilo de escalabilidad.
 
 ```
